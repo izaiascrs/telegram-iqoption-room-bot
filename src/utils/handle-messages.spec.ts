@@ -11,8 +11,8 @@ describe('handle messages functions', () => {
 		});
 
 		it('format message with currency pair, time frame, hours and buy signal / sell signal', () => {
-			const expectedCall = '⚠ **ATENÇÃO TRADERS!** \n\n  👉 USD/GBP \n\n  ⏱ 5 M \n\n ⏰ 10:10 \n\n 🟢👆 **COMPRA** 👆🟢';
-			const expectedPut = '⚠ **ATENÇÃO TRADERS!** \n\n  👉 USD/GBP \n\n  ⏱ 5 M \n\n ⏰ 10:10 \n\n 🔴👇 **VENDA** 👇🔴';
+			const expectedCall = '⚠ **ATENÇÃO TRADERS!** \n\n  👉 USD/GBP \n\n ⏱ 5 M \n\n ⏰ 10:10 \n\n 🟢👆 **COMPRA** 👆🟢';
+			const expectedPut = '⚠ **ATENÇÃO TRADERS!** \n\n  👉 USD/GBP \n\n ⏱ 5 M \n\n ⏰ 10:10 \n\n 🔴👇 **VENDA** 👇🔴';
 			const signalCall = ['CALL'] as unknown as RegExpExecArray;
 			const signalPut = ['PUT'] as unknown as RegExpExecArray;
 			const params = { currencyPair: 'USD/GBP', hours: '10:10', time: '5 M', signal: signalCall, channelName: 'my channel', };

@@ -47,7 +47,7 @@ const makeMockDestChannels = (): TDestinationListData[] => ([
 		id: 1,
 		advertiseMsgCount: 1,
 		advertiseMsgIndexController: makeCounter(),
-		
+		mixedRoom: false,
 	},
 	{
 		classification: 'Free',
@@ -55,6 +55,7 @@ const makeMockDestChannels = (): TDestinationListData[] => ([
 		id: 3,
 		advertiseMsgCount: 1,
 		advertiseMsgIndexController: makeCounter(),
+		mixedRoom: false,
 	},
 	{
 		classification: 'Free',
@@ -62,6 +63,7 @@ const makeMockDestChannels = (): TDestinationListData[] => ([
 		id: 2,
 		advertiseMsgCount: 1,
 		advertiseMsgIndexController: makeCounter(),
+		mixedRoom: false,
 	},
 ]);
 
@@ -167,7 +169,7 @@ describe('helpers functions', () => {
 					id: 1,
 					advertiseMsgCount: 1,
 					advertiseMsgIndexController: makeCounter(),
-					
+					mixedRoom: false,
 				},
 				{
 					classification: 'Free',
@@ -175,6 +177,7 @@ describe('helpers functions', () => {
 					id: 3,
 					advertiseMsgCount: 1,
 					advertiseMsgIndexController: makeCounter(),
+					mixedRoom: false,
 				},
 				{
 					classification: 'Free',
@@ -182,6 +185,7 @@ describe('helpers functions', () => {
 					id: 2,
 					advertiseMsgCount: 1,
 					advertiseMsgIndexController: makeCounter(),
+					mixedRoom: false,
 				},
 			];
 			const mockTelegramClient = makeFakeTelegramClient();
@@ -200,7 +204,7 @@ describe('helpers functions', () => {
 			const mockDestChannels = makeMockDestChannels();
 			const vipChannels = filterFreeChannels(mockDestChannels, true);
 			expect(vipChannels).toHaveLength(1);
-			mockDestChannels.push({ classification: 'Vip', id: 4, msgCounter: makeCounter(), advertiseMsgCount: 1, advertiseMsgIndexController: makeCounter() });
+			mockDestChannels.push({ classification: 'Vip', id: 4, msgCounter: makeCounter(), advertiseMsgCount: 1, advertiseMsgIndexController: makeCounter(), mixedRoom: false });
 			const vipChannels2 = filterFreeChannels(mockDestChannels, true);
 			expect(vipChannels2).toHaveLength(2);
 		});

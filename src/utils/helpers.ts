@@ -186,8 +186,7 @@ export function makeIsSendingMessage() {
 export function isBreakTime(date?: Date) {
 	const formattedTime = Intl.DateTimeFormat('pt-br', {
 		hour: '2-digit',
-		timeZone: 'America/Sao_Paulo',
-		hourCycle: 'h24',
+		timeZone: 'America/Sao_Paulo',		
 	});
 	const currentDate = date || new Date();	
 	const hours = Number(formattedTime.format(currentDate));
@@ -198,8 +197,7 @@ export function isFreeChannelWorkingTime(date?: Date) {
 	const formattedTime = Intl.DateTimeFormat('pt-br', {
 		hour: '2-digit',
 		minute: '2-digit',
-		timeZone: 'America/Sao_Paulo',
-		hourCycle: 'h24',
+		timeZone: 'America/Sao_Paulo',		
 	});
 
 	const currentDate = date || new Date();	
