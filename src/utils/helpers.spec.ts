@@ -5,6 +5,7 @@ import { TDestinationListData } from '../destination-list';
 import { TReport } from './handle-message';
 import {
 	applyFunctionAsync,
+	changeTimeZone,
 	filterFreeChannels,
 	handleMsgCount,
 	isBreakTime,
@@ -83,8 +84,7 @@ const mockMessage = {
 	message: 'test message',
 };
 
-const brLocaleDate = new Date(new Date().toLocaleString('en', { timeZone: 'America/Sao_Paulo'}));
-
+const brLocaleDate = changeTimeZone(new Date(), 'America/Sao_Paulo');
 
 describe('helpers functions', () => {
 
@@ -114,7 +114,7 @@ describe('helpers functions', () => {
 	
 		it('return true when hours is equal to 19', () => {
 			const currentDateTime = new Date(brLocaleDate);
-			const breakTime1 = isBreakTime(new Date(currentDateTime.setHours(19, 0)));
+			const breakTime1 = isBreakTime(new Date(currentDateTime.setHours(19)));
 			const breakTime2 = isBreakTime(new Date(currentDateTime.setHours(19, 59)));
 			expect(breakTime1).toBeTruthy();
 			expect(breakTime2).toBeTruthy();

@@ -184,34 +184,17 @@ export function makeIsSendingMessage() {
 }
 
 export function isBreakTime(date?: Date) {
-	const formattedTime = Intl.DateTimeFormat('pt-br', {
-		hour: '2-digit',
-		minute: '2-digit',
-		timeZone: 'America/Sao_Paulo',
-		hourCycle: 'h24',
-	});
-
-	const brLocaleDate = new Date(new Date().toLocaleString('en', { timeZone: 'America/Sao_Paulo'}));
-	const currentDate = date || new Date(brLocaleDate);
-	const [hours] = formattedTime.format(currentDate).split(':');
-	return (+hours >= 19 && +hours < 22);
+	const currentDate = date || new Date(changeTimeZone(new Date(), 'America/Sao_Paulo'));
+	const hours = currentDate.getHours();		
+	return (hours >= 19 && hours < 22);
 }
 
 export function isFreeChannelWorkingTime(date?: Date) {
-	const formattedTime = Intl.DateTimeFormat('pt-br', {
-		hour: '2-digit',
-		minute: '2-digit',
-		timeZone: 'America/Sao_Paulo',
-		hourCycle: 'h24',
-	});
-
-	const brLocaleDate = new Date(new Date().toLocaleString('en', { timeZone: 'America/Sao_Paulo'}));
-	const currentDate = date || new Date(brLocaleDate);	
-	const [hours, minutes] = formattedTime.format(currentDate).split(':');
-	const nHours = Number(hours);
-	const nMinutes = Number(minutes);
-	const allowedHours = (nHours >= 15 && nHours < 19);
-	const allowedHoursMinutes = nHours === 15 ? nMinutes >= 30 : true;
+	const currentDate = date || changeTimeZone(new Date(), 'America/Sao_Paulo');	
+	const hours = currentDate.getHours();
+	const minutes = currentDate.getMinutes();
+	const allowedHours = (hours >= 15 && hours < 19);
+	const allowedHoursMinutes = hours === 15 ? minutes >= 30 : true;
 	return (allowedHours && allowedHoursMinutes);	
 }
 
@@ -320,4 +303,20 @@ export function getTimeFrameByRoomId(id: number) {
 	if(M1_BOT_ID === id || MY_ID === id) return 'M1';
 	if(M5_BOT_ID === id) return 'M5';
 	if(M15_BOT_ID === id) return 'M15';
+}
+
+export function changeTimeZone(date: Date | string, timeZone: string) {
+	if (typeof date === 'string') {
+		return new Date(
+			new Date(date).toLocaleString('en', {
+				timeZone,
+			}),
+		);
+	}
+
+	return new Date(
+		date.toLocaleString('en', {
+			timeZone,
+		}),
+	);
 }
