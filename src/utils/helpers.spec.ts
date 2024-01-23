@@ -83,16 +83,20 @@ const mockMessage = {
 	message: 'test message',
 };
 
+const brLocaleDate = new Date(new Date().toLocaleString('en', { timeZone: 'America/Sao_Paulo'}));
+
+
 describe('helpers functions', () => {
 
 	describe('break time function', () => {
 		it('return false when current time less them 19 and grater then 22', () => {
-			const breakTime = isBreakTime();
+			const currentDateTime = new Date(brLocaleDate);
+			const breakTime = isBreakTime(new Date(currentDateTime.setHours(15, 0)));
 			expect(breakTime).toBeFalsy();
 		});
 	
 		it('return true when hours is between 19 and 21', () => {
-			const currentDateTime = new Date();
+			const currentDateTime = new Date(brLocaleDate);
 			const breakTime1 = isBreakTime(new Date(currentDateTime.setHours(19, 0)));
 			const breakTime2 = isBreakTime(new Date(currentDateTime.setHours(21, 59)));
 			
@@ -101,7 +105,7 @@ describe('helpers functions', () => {
 		});
 	
 		it('return false when hours is equal to 22', () => {
-			const currentDateTime = new Date();
+			const currentDateTime = new Date(brLocaleDate);
 			const breakTime1 = isBreakTime(new Date(currentDateTime.setHours(22, 0)));
 			const breakTime2 = isBreakTime(new Date(currentDateTime.setHours(22, 59)));
 			expect(breakTime1).toBeFalsy();
@@ -109,7 +113,7 @@ describe('helpers functions', () => {
 		});
 	
 		it('return true when hours is equal to 19', () => {
-			const currentDateTime = new Date();
+			const currentDateTime = new Date(brLocaleDate);
 			const breakTime1 = isBreakTime(new Date(currentDateTime.setHours(19, 0)));
 			const breakTime2 = isBreakTime(new Date(currentDateTime.setHours(19, 59)));
 			expect(breakTime1).toBeTruthy();
@@ -119,14 +123,14 @@ describe('helpers functions', () => {
 
 	describe('free channel working time function', () => {
 		it('return false if current time is NOT between 15:30 and 19:00', () => {
-			const date = new Date();			
+			const date = new Date(brLocaleDate);
 			expect( isFreeChannelWorkingTime(new Date(date.setHours(10))) ).toBe(false);
 			expect( isFreeChannelWorkingTime(new Date(date.setHours(15, 29))) ).toBe(false);
 			expect( isFreeChannelWorkingTime(new Date(date.setHours(19, 0))) ).toBe(false);
 		});
 
 		it('return true when current time is between 15:30 and 19:00', () => {
-			const date = new Date();			
+			const date = new Date(brLocaleDate);			
 			expect( isFreeChannelWorkingTime(new Date(date.setHours(15, 30))) ).toBe(true);
 			expect( isFreeChannelWorkingTime(new Date(date.setHours(18, 59))) ).toBe(true);
 			expect( isFreeChannelWorkingTime(new Date(date.setHours(16, 0))) ).toBe(true);

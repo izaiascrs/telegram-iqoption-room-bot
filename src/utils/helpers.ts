@@ -186,21 +186,27 @@ export function makeIsSendingMessage() {
 export function isBreakTime(date?: Date) {
 	const formattedTime = Intl.DateTimeFormat('pt-br', {
 		hour: '2-digit',
-		timeZone: 'America/Sao_Paulo',		
+		minute: '2-digit',
+		timeZone: 'America/Sao_Paulo',
+		hourCycle: 'h24',
 	});
-	const currentDate = date || new Date();	
-	const hours = Number(formattedTime.format(currentDate));
-	return (hours >= 19 && hours < 22);
+
+	const brLocaleDate = new Date(new Date().toLocaleString('en', { timeZone: 'America/Sao_Paulo'}));
+	const currentDate = date || new Date(brLocaleDate);
+	const [hours] = formattedTime.format(currentDate).split(':');
+	return (+hours >= 19 && +hours < 22);
 }
 
 export function isFreeChannelWorkingTime(date?: Date) {
 	const formattedTime = Intl.DateTimeFormat('pt-br', {
 		hour: '2-digit',
 		minute: '2-digit',
-		timeZone: 'America/Sao_Paulo',		
+		timeZone: 'America/Sao_Paulo',
+		hourCycle: 'h24',
 	});
 
-	const currentDate = date || new Date();	
+	const brLocaleDate = new Date(new Date().toLocaleString('en', { timeZone: 'America/Sao_Paulo'}));
+	const currentDate = date || new Date(brLocaleDate);	
 	const [hours, minutes] = formattedTime.format(currentDate).split(':');
 	const nHours = Number(hours);
 	const nMinutes = Number(minutes);
