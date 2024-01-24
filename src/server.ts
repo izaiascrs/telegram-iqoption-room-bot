@@ -54,6 +54,7 @@ import {
 import { initiateReportCron } from './cron/reports-cron';
 import { reportsController } from './report';
 import { client } from './telegram';
+import { msgsByTimeFrameCount } from './utils/messagesCountController';
 
 const {
 	set: setIsSendingMessage,
@@ -77,13 +78,6 @@ const {
 	reset: resetAllMsgCount,
 	value: getAllMsgCount,
 } = makeCounter();
-
-const msgsByTimeFrameCount = {
-	M1: makeCounter(),
-	M5: makeCounter(),
-	M15: makeCounter(),
-};
-
 
 initiateReportCron();
 
@@ -115,8 +109,8 @@ initiateReportCron();
 		
 		if(!channelById) return;
 
-		const receptorOne = filterFreeChannels(topSignalsIqOptionDestListIds, (msgsByTimeFrameCount['M1'].value() < MAX_MESSAGES_BEFORE_FREE_CHANNEL));
-		const receptorTwo = filterFreeChannels(communityOfTradersIqOptionDestListIds, msgsByTimeFrameCount['M1'].value() < MAX_MESSAGES_BEFORE_FREE_CHANNEL);
+		const receptorOne = filterFreeChannels(topSignalsIqOptionDestListIds);
+		const receptorTwo = filterFreeChannels(communityOfTradersIqOptionDestListIds);
 
 		const allDestinationList = [receptorOne, receptorTwo];
 
@@ -191,7 +185,7 @@ initiateReportCron();
 					const hasPairTimeAndSignal = ((currencyPair.length) && (time.length) && (hours.length) && (signal?.length));
 					const isMessageWithSignal = (hasPairTimeAndSignal && (getIsSendingMessage() === false));
 
-					if(isMessageWithSignal) {						
+					if(isMessageWithSignal) {
 						const timeFrame = getTimeFrameByTime(time);
 						const filteredChannels = allDestinationList.map((c) => filterFreeChannels(c, timeFrame !== 'M1'));
 
@@ -214,13 +208,13 @@ initiateReportCron();
 							filteredChannels,
 							sendMessagesToDestinationList,
 							client, messageObj
-						));
+						)).catch((err) => console.log(err));
 
-						await applyFunctionAsync(
+						await Promise.all(await applyFunctionAsync(
 							filteredChannels,
 							sendMandatoryMessage,
 							client
-						);
+						)).catch((err) => console.log(err));
 
 						if(getAllMsgCount() > MAX_MESSAGES_BEFORE_FREE_CHANNEL) resetAllMsgCount();
 						

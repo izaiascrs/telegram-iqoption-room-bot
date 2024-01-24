@@ -1,11 +1,12 @@
 import input from 'input';
 import { Api, TelegramClient } from 'telegram';
 import { TAdvertiseMessage } from '../advertise-messages';
-import { MAX_TIME_TO_WAITING_FOR_SIGNAL } from '../constants';
+import { MAX_MESSAGES_BEFORE_FREE_CHANNEL, MAX_TIME_TO_WAITING_FOR_SIGNAL } from '../constants';
 import { TDestinationListData } from '../destination-list';
 import { howToTradeMessages } from '../how-to-trade-messages';
 import { findChannelBySignal, setChannelWaitingForSignal } from './handle-channels';
 import { TReport, TTimeFrame } from './handle-message';
+import { msgsByTimeFrameCount } from './messagesCountController';
 
 type TMessage = {
   message: string,
@@ -72,14 +73,14 @@ export async function listDialogs(client: TelegramClient) {
 
 export async function sendMessagesToDestinationList(client: TelegramClient, messageObj: TMessage, destinationListArray: TDestinationListData[]) {
 
-	const replaceBroker = (mixedRoom: boolean, msg: string) => {
-		if(mixedRoom === true) return ({ message: msg });
+	const replaceBroker = (mixedChannel: boolean, msg: string) => {
+		if(mixedChannel === true) return ({ message: msg });
 		return ({
 			message: msg.replace(/🏛️.*?\n{1,3}/g, ''),
 		});		 
 	};
 
-	const promises = destinationListArray.map((dest) => client.sendMessage(dest.id, replaceBroker(dest.mixedRoom, messageObj.message)));
+	const promises = destinationListArray.map((dest) => client.sendMessage(dest.id, replaceBroker(dest.mixedChannel, messageObj.message)));
 	try {
 		await Promise.all(promises);		
 	} catch (error) {
@@ -143,13 +144,13 @@ export async function sendMandatoryMessage(client: TelegramClient, destinationLi
 	await Promise.all(promises);
 }
 
-export function makeCounter() {
+export function makeCounter() {	
 	let count = 0;
 	return Object.freeze({
 		value: () => count,
 		increment: () => count++,
 		reset: () => count = 0,
-	});
+	});	
 }
 
 export function makeSignalTimeout() {
@@ -195,7 +196,7 @@ export function isFreeChannelWorkingTime(date?: Date) {
 	const minutes = currentDate.getMinutes();
 	const allowedHours = (hours >= 15 && hours < 19);
 	const allowedHoursMinutes = hours === 15 ? minutes >= 30 : true;
-	return (allowedHours && allowedHoursMinutes);	
+	return (allowedHours && allowedHoursMinutes);
 }
 
 export function applyFunctionAsync<T, R>(
@@ -214,9 +215,17 @@ export function applyFunctionAsync<T, R>(
 	});
 }
 
-export function filterFreeChannels(destinationListArray: TDestinationListData[], filter: boolean) {
+export function filterFreeChannels(destinationListArray: TDestinationListData[], filter?: boolean) {
 	if(filter) return destinationListArray.filter((list) => list.classification !== 'Free');
-	return destinationListArray;
+	const isCountEqualToMaxMsgs = (msgsByTimeFrameCount['M1'].value() >= MAX_MESSAGES_BEFORE_FREE_CHANNEL);	
+	const filteredArray = destinationListArray.filter((list: TDestinationListData) => {
+		if (list.classification === 'Vip') return true;
+		if (isCountEqualToMaxMsgs && !list.hasWorkingTime) return true;
+		if (list.hasWorkingTime && isFreeChannelWorkingTime() && isCountEqualToMaxMsgs) return true;
+		return false;
+	}, []);
+	
+	return filteredArray;
 }
 
 export function handleMsgCount(destinationListArray: TDestinationListData[][]) {
@@ -229,11 +238,8 @@ export function handleMsgCount(destinationListArray: TDestinationListData[][]) {
 	}
 }
 
-export async function handleSendAdvertiseMessage(client: TelegramClient, advtMsgs: TAdvertiseMessage, destList: TDestinationListData[]) {
-	const shouldNotSendMsg = (classification: 'Vip' | 'Free') => classification === 'Free' && !isFreeChannelWorkingTime();
-	for await (const destItem of destList) {
-		// skip free channels between 15:30 to 19:00
-		if(shouldNotSendMsg(destItem.classification)) continue;
+export async function handleSendAdvertiseMessage(client: TelegramClient, advtMsgs: TAdvertiseMessage, destList: TDestinationListData[]) {	
+	for await (const destItem of destList) {		
 		if(destItem.msgCounter.value() >= destItem.advertiseMsgCount) {
 			await sendAdvertiseMessageToDestinationList(client, destItem, advtMsgs);
 			destItem.msgCounter.reset();

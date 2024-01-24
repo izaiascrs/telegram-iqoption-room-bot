@@ -1,18 +1,16 @@
-import { schedule, ScheduleOptions } from 'node-cron';
+import { ScheduleOptions, schedule } from 'node-cron';
+import { TelegramClient } from 'telegram';
 import { communityOfTradersIqOptionDestListIds, topSignalsIqOptionDestListIds } from '../destination-list';
 import { reportsController } from '../report';
 import { client } from '../telegram';
-import { formatReportMessage, TTimeFrame } from '../utils/handle-message';
+import { TTimeFrame, formatReportMessage } from '../utils/handle-message';
 import { filterFreeChannels, sendReportMessageToDestinationList } from '../utils/helpers';
+import { TCronConfig, reportsCronConfig } from './reports-config';
 
 const receptorOne = filterFreeChannels(topSignalsIqOptionDestListIds, true);
 const receptorTwo = filterFreeChannels(communityOfTradersIqOptionDestListIds, true);
 
-const M1_REPORT_CRON = '05 15 */1 * * *';
-const M5_REPORT_CRON = '27 45 */1 * * *';
-const M15_REPORT_CRON = '59 37 */2 * * *';
-
-const options: ScheduleOptions = {
+const cronDefaultOptions: ScheduleOptions = {
 	timezone: 'America/Sao_Paulo',
 };
 
@@ -24,28 +22,26 @@ function createReportMessage(timeFrame: TTimeFrame) {
 	return reportMsgObj;
 }
 
+async function sendReportMessage(client: TelegramClient, timeFrame: TTimeFrame) {	
+	const reportMsgObj = createReportMessage(timeFrame);
+	if(!client.connected || !reportMsgObj) return;
+	await sendReportMessageToDestinationList(client, receptorOne, reportMsgObj);
+	await sendReportMessageToDestinationList(client, receptorTwo, reportMsgObj);
+	reportsController.cleanReports(timeFrame);	
+	console.log('cron job running at time frame', new Date().toLocaleString(), timeFrame);
+}
+
+function createCronInterval(options: TCronConfig) {
+	const { hours, minutes, seconds} = options;
+	if(hours > 0) return `${seconds} ${minutes} */${hours} * * *`;
+	return `${seconds} */${minutes} * * * *`;	
+}
+
+
 export function initiateReportCron() {
-	schedule(M1_REPORT_CRON, async () => {		
-		const reportMsgObj = createReportMessage('M1');
-		if(!client.connected || !reportMsgObj) return;
-		await sendReportMessageToDestinationList(client, receptorOne, reportMsgObj);
-		await sendReportMessageToDestinationList(client, receptorTwo, reportMsgObj);
-		reportsController.cleanReports('M1');	
-	}, options);
-  
-	schedule(M5_REPORT_CRON, async () => {
-		const reportMsgObj = createReportMessage('M5');
-		if(!client.connected || !reportMsgObj) return;
-		await sendReportMessageToDestinationList(client, receptorOne, reportMsgObj);
-		await sendReportMessageToDestinationList(client, receptorTwo, reportMsgObj);
-		reportsController.cleanReports('M5');	
-	}, options);
-  
-	schedule(M15_REPORT_CRON, async () => {
-		const reportMsgObj = createReportMessage('M15');
-		if(!client.connected || !reportMsgObj) return;
-		await sendReportMessageToDestinationList(client, receptorOne, reportMsgObj);
-		await sendReportMessageToDestinationList(client, receptorTwo, reportMsgObj);
-		reportsController.cleanReports('M15');	
-	}, options);
+	Object.entries(reportsCronConfig).forEach(([key, options]) => {
+		const timeFrame = key as keyof typeof reportsCronConfig;
+		const cronInterval = createCronInterval(options);		
+		schedule(cronInterval, async () => await sendReportMessage(client, timeFrame), cronDefaultOptions);
+	});	
 }

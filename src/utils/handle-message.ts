@@ -1,5 +1,6 @@
 import { Api } from 'telegram';
 import { NewMessageEvent } from 'telegram/events';
+import { reportsCronConfig } from '../cron/reports-config';
 import { currenciesLookup } from '../currencies';
 
 type TCreateNewMessageParams = {
@@ -274,17 +275,17 @@ export function formatReportMessage(reports: TReport[], timeFrame: TTimeFrame) {
 	const stats = createReportStatus(reports);
 	const percentages = createReportStatistics(stats);
 
-	const headerMsg = createReportHeaderMsg(timeFrame);
-	const signalMsgs = createHistoricMessages(reports);
-	const legendMsg = createReportLegendMessage();
-	const statisticsMsg = createStatisticsReportMessage(percentages, stats);
-	const scoreMsg = generateScore(stats);
+	const header = createReportHeaderMsg(timeFrame);
+	const signal = createHistoricMessages(reports);
+	const legend = createReportLegendMessage();
+	const statistics = createStatisticsReportMessage(percentages, stats);
+	const score = generateScore(stats);
 	const finalMessage = 
-		headerMsg
-		+ legendMsg + '\n'
-		+ signalMsgs + '\n'
-		+ statisticsMsg + '\n'
-		+ scoreMsg;
+		header +
+		legend + '\n' +
+		signal + '\n' +
+		statistics + '\n' +
+		score;
 
 	return finalMessage;
 		
@@ -329,8 +330,7 @@ export function formatReportMessage(reports: TReport[], timeFrame: TTimeFrame) {
 
 	function createHistoricMessages(reports: TReport[]) {
 		return reports.reduce((acc, val) => {
-			const formattedTime = val.time.split(' ').reverse().join('');
-			return acc += `${formattedTime} ${val.currencyPair} - ${val.direction} ${ val.result } \n`; 
+			return acc += `${val.hours} ${val.currencyPair} - ${val.direction} ${ val.result } \n`; 
 		}, '');
 	}
 	
@@ -374,18 +374,24 @@ export function formatReportMessage(reports: TReport[], timeFrame: TTimeFrame) {
 	}
 	
 	function getStartTimeBaseOnTimeFrame(timeFrame: TTimeFrame) {
-		const startTime = new Date();
-
+		
 		if(timeFrame === 'M1') {
-			return formatTime(new Date(startTime.setHours(startTime.getHours() - 1, startTime.getMinutes() - 15)));
+			return formatTime(new Date(setHoursAndMinutesBasedOnTimeFrame('M1')));
 		}
 
 		if(timeFrame === 'M5') {
-			return formatTime(new Date(startTime.setHours(startTime.getHours() - 1, startTime.getMinutes() - 45)));
+			return formatTime(new Date(setHoursAndMinutesBasedOnTimeFrame('M5')));
 		}
 
 		if(timeFrame === 'M15') {
-			return formatTime(new Date(startTime.setHours(startTime.getHours() - 2, startTime.getMinutes() - 37 )));
+			return formatTime(new Date(setHoursAndMinutesBasedOnTimeFrame('M15')));
+		}
+
+		function setHoursAndMinutesBasedOnTimeFrame(timeFrame: TTimeFrame) {
+			const startTime = new Date();
+			const hours = reportsCronConfig[timeFrame].hours;
+			const minutes = reportsCronConfig[timeFrame].minutes;
+			return startTime.setHours(startTime.getHours() - hours, startTime.getMinutes() - minutes);
 		}
 	}
 	

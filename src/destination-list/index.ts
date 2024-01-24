@@ -1,11 +1,12 @@
-import { TMakeCounter, makeCounter } from '../utils/helpers';
+import { makeCounter, type TMakeCounter } from '../utils/helpers';
 
 type TDestinationList = {
-  type: 'Channel' | 'User' | 'Group';
   id: number;
+  type: 'Channel' | 'User' | 'Group';
   name: string;
   classification: 'Vip' | 'Free';
-	mixedRoom: boolean;
+	mixedChannel: boolean;
+	hasWorkingTime: boolean;
 }
 
 export type TDestinationListData = {
@@ -14,24 +15,27 @@ export type TDestinationListData = {
 	msgCounter: TMakeCounter;
 	advertiseMsgCount: number;
 	advertiseMsgIndexController: TMakeCounter;
-	mixedRoom: boolean;
-}
+	mixedChannel: boolean;
+	hasWorkingTime: boolean;
+};
 
 const topSignalsIqOptionDestList: TDestinationList[] = [
 	// ***** channel to send ************ //
 	{
-		type: 'Group',
+		type: 'Group', 
 		id: 4072662222,
 		name: 'Canal IqOption teste Vip',
 		classification: 'Vip',
-		mixedRoom: false,
+		mixedChannel: false,
+		hasWorkingTime: false,
 	},
 	{
 		type: 'Group',
 		id: 4166700266,
 		name: 'Canal IqOption teste Free',
 		classification: 'Free',
-		mixedRoom: false,
+		mixedChannel: false,
+		hasWorkingTime: false,
 	},
 	// ***** channel to send ************ //
 
@@ -40,6 +44,7 @@ const topSignalsIqOptionDestList: TDestinationList[] = [
 	// 	id: 6018633227,
 	// 	name: 'izaias',
 	// 	classification: 'Vip',
+	//  hasWorkingTime: false,
 	// },
 ];
 
@@ -50,17 +55,19 @@ const communityOfTradersIqOptionDestList: TDestinationList[] = [
 		id: 4037329961,
 		name: 'Canal teste Free',
 		classification: 'Free',
-		mixedRoom: true,
+		mixedChannel: true,
+		hasWorkingTime: true,
 	},
 	// ***** channel to send ************ //
 ];
 
 function makeDestinationItem (item: TDestinationList) {
-	const { id, classification, mixedRoom } = item;
+	const { id, classification, mixedChannel, hasWorkingTime } = item;
 	return {
 		id,
+		mixedChannel,
+		hasWorkingTime,
 		classification,
-		mixedRoom,
 		msgCounter: makeCounter(),
 		advertiseMsgCount: classification === 'Vip' ? 10 : 5,
 		advertiseMsgIndexController: makeCounter(),
