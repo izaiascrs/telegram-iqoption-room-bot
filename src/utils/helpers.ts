@@ -4,8 +4,9 @@ import { TAdvertiseMessage } from '../advertise-messages';
 import { MAX_MESSAGES_BEFORE_FREE_CHANNEL, MAX_TIME_TO_WAITING_FOR_SIGNAL } from '../constants';
 import { TDestinationListData } from '../destination-list';
 import { howToTradeMessages } from '../how-to-trade-messages';
+import { TReportsController } from '../report';
 import { findChannelBySignal, setChannelWaitingForSignal } from './handle-channels';
-import { TReport, TTimeFrame } from './handle-message';
+import { TReport, TTimeFrame, formatReportMessage } from './handle-message';
 import { msgsByTimeFrameCount } from './messagesCountController';
 
 type TMessage = {
@@ -249,28 +250,48 @@ export async function handleSendAdvertiseMessage(client: TelegramClient, advtMsg
 
 export function makeReportController() {
 	const controller = {
-		M1: makeController(),
-		M5: makeController(),
-		M15: makeController(),
+		M1: {
+			controller: makeController(),
+			minResults: 10,
+		},
+		M5:{
+			controller: makeController(),
+			minResults: 5,
+		},
+		M15: {
+			controller: makeController(),
+			minResults: 5,
+		}
 	} as const;
 
 	return Object.freeze({
 		addReport,
 		cleanReports,
-		getReports,		
+		getReports,
+		shouldSendReport
 	});
 
 	function addReport(key: keyof typeof controller, data: TReport) {
-		return controller[key].reports.push(data);
+		return controller[key].controller.reports.push(data);
 	}
 
 	function cleanReports(key: keyof typeof controller) {
-		const reports = controller[key].reports;
+		const reports = controller[key].controller.reports;
 		return reports.splice(0, reports.length);
 	}
 
 	function getReports(key: keyof typeof controller) {
-		return controller[key].reports;
+		return controller[key].controller.reports;
+	}
+
+	function getMinResult(key: keyof typeof controller) {
+		return controller[key].minResults;
+	}
+
+	function shouldSendReport(key: keyof typeof controller) {
+		const reportsByKeyLength = getReports(key).length;
+		const minReportsResults = getMinResult(key);
+		return reportsByKeyLength >= minReportsResults;
 	}
 
 	function makeController() {
@@ -280,6 +301,35 @@ export function makeReportController() {
 			get: getReports, 
 			reports: [] as TReport[],
 		};
+	}
+}
+
+type TSendReportMsg = {
+	client: TelegramClient,
+	timeFrame: TTimeFrame,
+	reportsController: TReportsController, 
+	destChannels: TDestinationListData[][]
+}
+
+export async function sendReportMessage(params: TSendReportMsg) {
+	const { client, reportsController, timeFrame, destChannels } = params;
+	const reportMsgObj = createReportMessage(timeFrame);
+	if(!client.connected || !reportMsgObj) return;	
+
+	const receptors = destChannels.map((channel) => filterFreeChannels(channel, true));
+	const reportsPromises = receptors.map((receptor) => sendReportMessageToDestinationList(client, receptor, reportMsgObj));
+	
+	await Promise.allSettled(reportsPromises)
+		.catch((err) => console.log(err));
+
+	reportsController.cleanReports(timeFrame);
+
+	function createReportMessage(timeFrame: TTimeFrame) {
+		const reports = reportsController.getReports(timeFrame);
+		const reportMsg = formatReportMessage(reports, timeFrame);  
+		const reportMsgObj = { message: reportMsg };
+		if(reports.length === 0) return null;
+		return reportMsgObj;
 	}
 }
 

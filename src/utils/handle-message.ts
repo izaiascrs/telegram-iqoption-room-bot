@@ -1,6 +1,5 @@
 import { Api } from 'telegram';
 import { NewMessageEvent } from 'telegram/events';
-import { reportsCronConfig } from '../cron/reports-config';
 import { currenciesLookup } from '../currencies';
 
 type TCreateNewMessageParams = {
@@ -274,8 +273,10 @@ export function extractResultFromMessage(msg: string): TReport {
 export function formatReportMessage(reports: TReport[], timeFrame: TTimeFrame) {
 	const stats = createReportStatus(reports);
 	const percentages = createReportStatistics(stats);
+	const startTime = reports.at(0)?.hours || '';
+	const endTime = reports.at(-1)?.hours || '';
 
-	const header = createReportHeaderMsg(timeFrame);
+	const header = createReportHeaderMsg(timeFrame, startTime, endTime);
 	const signal = createHistoricMessages(reports);
 	const legend = createReportLegendMessage();
 	const statistics = createStatisticsReportMessage(percentages, stats);
@@ -334,9 +335,9 @@ export function formatReportMessage(reports: TReport[], timeFrame: TTimeFrame) {
 		}, '');
 	}
 	
-	function createReportHeaderMsg(timeFrame: TTimeFrame) {
-		const startTime = getStartTimeBaseOnTimeFrame('M1');
-		const endTime = formatTime(new Date());
+	function createReportHeaderMsg(timeFrame: TTimeFrame, startTime: string, endTime: string) {
+		// const startTime = getStartTimeBaseOnTimeFrame('M1');
+		// const endTime = formatTime(new Date());
 		const date = new Date().toLocaleDateString();
 		
 		const title = `📊 RELATÓRIO DAS OPERAÇÕES **${timeFrame}**:\n \n`;
@@ -362,37 +363,37 @@ export function formatReportMessage(reports: TReport[], timeFrame: TTimeFrame) {
 		return `PLACAR: ${stats.wins} ✅ x ${stats.loses} 🛑`;
 	}
 
-	function formatTime(date: Date) {
-		const formattedTime = Intl.DateTimeFormat('pt-br', {
-			hour: '2-digit',
-			minute: '2-digit',
-			timeZone: 'America/Sao_Paulo',
-			hourCycle: 'h24',
-		});
+	// function formatTime(date: Date) {
+	// 	const formattedTime = Intl.DateTimeFormat('pt-br', {
+	// 		hour: '2-digit',
+	// 		minute: '2-digit',
+	// 		timeZone: 'America/Sao_Paulo',
+	// 		hourCycle: 'h24',
+	// 	});
 
-		return formattedTime.format(date);
-	}
+	// 	return formattedTime.format(date);
+	// }
 	
-	function getStartTimeBaseOnTimeFrame(timeFrame: TTimeFrame) {
+	// function getStartTimeBaseOnTimeFrame(timeFrame: TTimeFrame) {
 		
-		if(timeFrame === 'M1') {
-			return formatTime(new Date(setHoursAndMinutesBasedOnTimeFrame('M1')));
-		}
+	// 	if(timeFrame === 'M1') {
+	// 		return formatTime(new Date(setHoursAndMinutesBasedOnTimeFrame('M1')));
+	// 	}
 
-		if(timeFrame === 'M5') {
-			return formatTime(new Date(setHoursAndMinutesBasedOnTimeFrame('M5')));
-		}
+	// 	if(timeFrame === 'M5') {
+	// 		return formatTime(new Date(setHoursAndMinutesBasedOnTimeFrame('M5')));
+	// 	}
 
-		if(timeFrame === 'M15') {
-			return formatTime(new Date(setHoursAndMinutesBasedOnTimeFrame('M15')));
-		}
+	// 	if(timeFrame === 'M15') {
+	// 		return formatTime(new Date(setHoursAndMinutesBasedOnTimeFrame('M15')));
+	// 	}
 
-		function setHoursAndMinutesBasedOnTimeFrame(timeFrame: TTimeFrame) {
-			const startTime = new Date();
-			const hours = reportsCronConfig[timeFrame].hours;
-			const minutes = reportsCronConfig[timeFrame].minutes;
-			return startTime.setHours(startTime.getHours() - hours, startTime.getMinutes() - minutes);
-		}
-	}
+	// 	function setHoursAndMinutesBasedOnTimeFrame(timeFrame: TTimeFrame) {
+	// 		const startTime = new Date();
+	// 		const hours = reportsCronConfig[timeFrame].hours;
+	// 		const minutes = reportsCronConfig[timeFrame].minutes;
+	// 		return startTime.setHours(startTime.getHours() - hours, startTime.getMinutes() - minutes);
+	// 	}
+	// }
 	
 }

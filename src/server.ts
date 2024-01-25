@@ -17,7 +17,8 @@ import {
 	makeIsSendingMessage,
 	makeSignalTimeout,
 	sendMandatoryMessage,
-	sendMessagesToDestinationList
+	sendMessagesToDestinationList,
+	sendReportMessage
 } from './utils/helpers';
 
 import {
@@ -51,7 +52,6 @@ import {
 import {
 	MAX_MESSAGES_BEFORE_FREE_CHANNEL
 } from './constants';
-import { initiateReportCron } from './cron/reports-cron';
 import { reportsController } from './report';
 import { client } from './telegram';
 import { msgsByTimeFrameCount } from './utils/messagesCountController';
@@ -79,8 +79,6 @@ const {
 	value: getAllMsgCount,
 } = makeCounter();
 
-initiateReportCron();
-
 (async () => {
 	await client.connect();
 	await client.getDialogs();
@@ -100,7 +98,15 @@ initiateReportCron();
 		if(isResultMessage(messageData.message)) {
 			const data = extractResultFromMessage(messageData.message);			
 			const timeFrame = getTimeFrameByTime(data.time);
-			reportsController.addReport(timeFrame, data);	
+			reportsController.addReport(timeFrame, data);
+			if(reportsController.shouldSendReport(timeFrame)) {
+				await sendReportMessage({ 
+					client,
+					timeFrame,
+					reportsController,
+					destChannels: [topSignalsIqOptionDestListIds, communityOfTradersIqOptionDestListIds ]
+				});
+			}
 			return;	
 		}
 

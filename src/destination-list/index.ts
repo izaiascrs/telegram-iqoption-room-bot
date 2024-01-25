@@ -22,22 +22,41 @@ export type TDestinationListData = {
 const topSignalsIqOptionDestList: TDestinationList[] = [
 	// ***** channel to send ************ //
 	{
-		type: 'Group', 
-		id: 4072662222,
-		name: 'Canal IqOption teste Vip',
+		type: 'Channel',
+		id: 2092057546,
+		name: 'TOP SINAIS IQ OPTION - VIP',
 		classification: 'Vip',
-		mixedChannel: false,
 		hasWorkingTime: false,
+		mixedChannel: false,
 	},
 	{
-		type: 'Group',
-		id: 4166700266,
-		name: 'Canal IqOption teste Free',
+		type: 'Channel',
+		id: 1438461236,
+		name: 'TOP SINAIS Grupo GB - Sinais Free 📊',
 		classification: 'Free',
-		mixedChannel: false,
 		hasWorkingTime: false,
-	},
+		mixedChannel: false,
+	}
 	// ***** channel to send ************ //
+
+	// ***** TEST CHANNELS  ************ //
+	// {
+	// 	type: 'Group', 
+	// 	id: 4072662222,
+	// 	name: 'Canal IqOption teste Vip',
+	// 	classification: 'Vip',
+	// 	mixedChannel: false,
+	// 	hasWorkingTime: false,
+	// },
+
+	// {
+	// 	type: 'Group',
+	// 	id: 4166700266,
+	// 	name: 'Canal IqOption teste Free',
+	// 	classification: 'Free',
+	// 	mixedChannel: false,
+	// 	hasWorkingTime: false,
+	// },
 
 	// {
 	// 	type: 'User',
@@ -46,19 +65,31 @@ const topSignalsIqOptionDestList: TDestinationList[] = [
 	// 	classification: 'Vip',
 	//  hasWorkingTime: false,
 	// },
+	// ***** TEST CHANNELS  ************ //
 ];
 
 const communityOfTradersIqOptionDestList: TDestinationList[] = [
 	// ***** channel to send ************ //
 	{
-		type: 'Group',
-		id: 4037329961,
-		name: 'Canal teste Free',
-		classification: 'Free',
-		mixedChannel: true,
-		hasWorkingTime: true,
+		type: 'Channel',
+		id:  1330013476,
+		name: 'IQ OPTION - COMUNIDADE DOS TRADERS',
+		classification: 'Vip',
+		hasWorkingTime: false,
+		mixedChannel: false,
 	},
 	// ***** channel to send ************ //
+
+	// ***** TEST CHANNELS  ************ //
+	// {
+	// 	type: 'Group',
+	// 	id: 4037329961,
+	// 	name: 'Canal teste Free',
+	// 	classification: 'Free',
+	// 	mixedChannel: true,
+	// 	hasWorkingTime: true,
+	// },
+	// ***** TEST CHANNELS  ************ //
 ];
 
 function makeDestinationItem (item: TDestinationList) {
