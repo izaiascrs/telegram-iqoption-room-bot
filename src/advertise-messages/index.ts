@@ -38,6 +38,33 @@ export const topSignalsIqOptionAdvertiseMessages : TAdvertiseMessage = {
       '🌟SIIIMMM! EU SEI! Você já está lucrando com nossos Sinais Free? Mas, que tal lucrar MUITO MAIS ?😱\n' +'\n' +
       '🤩Gostou né!?\n' +'\n' +
       '🚀 💵 Chama agora: @gsantos_ob',
+		},
+		{
+			message: '📉📈  COMO APROVEITAR NOSSOS SINAIS❓\n' +
+      '\n' +
+      '\n' +
+      '🚨 NÃO RECOMENDAMOS O USO DE MARTINGALE, PORÉM, SE VOCÊ DECIDIR USAR, SUGERIMOS QUE UTILIZE SOMENTE 1 MARTINGALE (SE NECESSÁRIO) 🚨\n' +
+      '\n' +
+      '\n' +
+      '⚠️ 👉 🔎 FILTRE AS OPERAÇÕES:\n' +
+      '\n' +
+      '✔️ Verifique a tendência e entre somente a favor da tendência.\n' +
+      '\n' +
+      '❌ Não entre em todas as operações! Você tem mais de 100 por dia. 😃 \n' +
+      '\n' +
+      '👉 Dê preferência para entrar nas operações que aconteça um GAP em seu favor. \n' +
+      '\n' +
+      '⏰ Fique atento ao Tempo de Expiração da operação.\n' +
+      '\n' +
+      '🔢 Siga um Gerenciamento inteligente e profissional.\n' +
+      '\n' +
+      '🤯 Não opere se estiver com o seu psicológico abalado de alguma forma.\n' +
+      '\n' +
+      '🚫 Não opere colocando em risco dinheiro comprometido com contas e sua subsistência. \n' +
+      '\n' +
+      '\n' +
+      '💲👉 Se precisa saber \n' +
+      'mais sobre trade entre em contato com o nosso suporte e solicite materiais GRATUITOS 🆓',
 		}
 	]
 };
@@ -69,6 +96,33 @@ export const communityOfTradersIqOptionAdvertiseMessages : TAdvertiseMessage = {
       '🌟SIIIMMM! EU SEI! Você já está lucrando com nossos Sinais Free? Mas, que tal lucrar MUITO MAIS ?😱\n' +'\n' +
       '🤩Gostou né!?\n' +'\n' +
       '🚀 💵 Chama agora: https://bit.ly/QUERO-MINHA-PRÓPRIA-SALA-DE-SINAIS',
+		},
+		{
+			message: '📉📈  COMO APROVEITAR NOSSOS SINAIS❓\n' +
+      '\n' +
+      '\n' +
+      '🚨 NÃO RECOMENDAMOS O USO DE MARTINGALE, PORÉM, SE VOCÊ DECIDIR USAR, SUGERIMOS QUE UTILIZE SOMENTE 1 MARTINGALE (SE NECESSÁRIO) 🚨\n' +
+      '\n' +
+      '\n' +
+      '⚠️ 👉 🔎 FILTRE AS OPERAÇÕES:\n' +
+      '\n' +
+      '✔️ Verifique a tendência e entre somente a favor da tendência.\n' +
+      '\n' +
+      '❌ Não entre em todas as operações! Você tem mais de 100 por dia. 😃 \n' +
+      '\n' +
+      '👉 Dê preferência para entrar nas operações que aconteça um GAP em seu favor. \n' +
+      '\n' +
+      '⏰ Fique atento ao Tempo de Expiração da operação.\n' +
+      '\n' +
+      '🔢 Siga um Gerenciamento inteligente e profissional.\n' +
+      '\n' +
+      '🤯 Não opere se estiver com o seu psicológico abalado de alguma forma.\n' +
+      '\n' +
+      '🚫 Não opere colocando em risco dinheiro comprometido com contas e sua subsistência. \n' +
+      '\n' +
+      '\n' +
+      '💲👉 Se precisa saber \n' +
+      'mais sobre trade entre em contato com o nosso suporte e solicite materiais GRATUITOS 🆓',
 		}
 	]
 };

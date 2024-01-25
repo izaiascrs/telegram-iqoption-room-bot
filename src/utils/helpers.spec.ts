@@ -100,11 +100,11 @@ describe('helpers functions', () => {
 	});
 
 	describe('free channel working time function', () => {
-		it('return false if current time is NOT between 15:30 and 19:00', () => {
+		it('return false if current time between 19:00 and 15:30', () => {
 			const date = new Date(brLocaleDate);
 			expect( isFreeChannelWorkingTime(new Date(date.setHours(10))) ).toBe(false);
 			expect( isFreeChannelWorkingTime(new Date(date.setHours(15, 29))) ).toBe(false);
-			expect( isFreeChannelWorkingTime(new Date(date.setHours(19, 0))) ).toBe(false);
+			expect( isFreeChannelWorkingTime(new Date(date.setHours(19, 0))) ).toBe(false);			
 		});
 
 		it('return true when current time is between 15:30 and 19:00', () => {

@@ -78,6 +78,14 @@ const communityOfTradersIqOptionDestList: TDestinationList[] = [
 		hasWorkingTime: false,
 		mixedChannel: false,
 	},
+	{
+		type: 'Channel',
+		id: 1933838176,
+		name: 'COMUNIDADE DOS TRADERS FREE',
+		classification: 'Free',
+		hasWorkingTime: true,
+		mixedChannel: true,
+	},
 	// ***** channel to send ************ //
 
 	// ***** TEST CHANNELS  ************ //
