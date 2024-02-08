@@ -7,12 +7,12 @@ export type TChannelInfo = {
 
 // ************ channels watch list ************ //
 export const channelsWatchList: TChannelInfo[] = [
-	{
-		id: -1002137003427,
-		name: 'Canal teste',
-		waitingForSignal: false,
-		type: 'Channel'
-	},
+	// {
+	// 	id: -1002137003427,
+	// 	name: 'Canal teste',
+	// 	waitingForSignal: false,
+	// 	type: 'Channel'
+	// },
 
 	{
 		id: -1001625871874,

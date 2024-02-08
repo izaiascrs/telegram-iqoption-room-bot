@@ -63,16 +63,15 @@ export function checkIfStickIsCallOrPut(media: Api.MessageMediaDocument) {
 }
 
 export function createNewSignalMessage(params: TCreateNewMessageParams) {
-	const { currencyPair, time, hours, signal } = params;
-	const isOtc = /otc/gi.test(currencyPair);
-	const broker = isOtc ? 'IQ OPTION' : '';
+	const { currencyPair, time, hours, signal } = params;	
+	const broker = 'IQ OPTION';
 	if (signal && signal.length) {
 		const CALL_PUT_SIGNAL = checkIfSignalMessageIsCallOrPut(signal[0]);
 		const CALL_PUT_MESSAGE = createTradeSignalMessage(CALL_PUT_SIGNAL);
-		const formattedMessage = `⚠ **ATENÇÃO TRADERS!** \n\n ${ broker.length ? `🏛️ **${broker}** \n\n` : ''} 👉 ${currencyPair} \n\n ⏱ ${time} \n\n ${ hours.length ? '⏰ ' + hours+ ' \n\n' : ''} ${CALL_PUT_MESSAGE}`;
+		const formattedMessage = `⚠ **ATENÇÃO TRADERS!** \n\n 🏛️ **${broker}** \n\n  👉 ${currencyPair} \n\n ⏱ ${time} \n\n ${ hours.length ? '⏰ ' + hours+ ' \n\n' : ''} ${CALL_PUT_MESSAGE}`;
 		return formattedMessage;
 	} else {		
-		const formattedMessage = `⚠ **ATENÇÃO TRADERS!** \n 👉 ${currencyPair} \n ⏱ ${time} \n 🏁 Aguarde o momento de entrada`;
+		const formattedMessage = `⚠ **ATENÇÃO TRADERS!** \n 🏛️ **${broker}** \n 👉 ${currencyPair} \n ⏱ ${time} \n 🏁 Aguarde o momento de entrada`;
 		return formattedMessage;
 	}
 }
@@ -335,11 +334,8 @@ export function formatReportMessage(reports: TReport[], timeFrame: TTimeFrame) {
 		}, '');
 	}
 	
-	function createReportHeaderMsg(timeFrame: TTimeFrame, startTime: string, endTime: string) {
-		// const startTime = getStartTimeBaseOnTimeFrame('M1');
-		// const endTime = formatTime(new Date());
-		const date = new Date().toLocaleDateString();
-		
+	function createReportHeaderMsg(timeFrame: TTimeFrame, startTime: string, endTime: string) {		
+		const date = new Date().toLocaleDateString();		
 		const title = `📊 RELATÓRIO DAS OPERAÇÕES **${timeFrame}**:\n \n`;
 		const subTitle = `Período: **${startTime}** às **${endTime}**.\n \n Dia: **${date}**\n \n`;
 
@@ -362,38 +358,4 @@ export function formatReportMessage(reports: TReport[], timeFrame: TTimeFrame) {
 	function generateScore(stats: TReportStatus) {
 		return `PLACAR: ${stats.wins} ✅ x ${stats.loses} 🛑`;
 	}
-
-	// function formatTime(date: Date) {
-	// 	const formattedTime = Intl.DateTimeFormat('pt-br', {
-	// 		hour: '2-digit',
-	// 		minute: '2-digit',
-	// 		timeZone: 'America/Sao_Paulo',
-	// 		hourCycle: 'h24',
-	// 	});
-
-	// 	return formattedTime.format(date);
-	// }
-	
-	// function getStartTimeBaseOnTimeFrame(timeFrame: TTimeFrame) {
-		
-	// 	if(timeFrame === 'M1') {
-	// 		return formatTime(new Date(setHoursAndMinutesBasedOnTimeFrame('M1')));
-	// 	}
-
-	// 	if(timeFrame === 'M5') {
-	// 		return formatTime(new Date(setHoursAndMinutesBasedOnTimeFrame('M5')));
-	// 	}
-
-	// 	if(timeFrame === 'M15') {
-	// 		return formatTime(new Date(setHoursAndMinutesBasedOnTimeFrame('M15')));
-	// 	}
-
-	// 	function setHoursAndMinutesBasedOnTimeFrame(timeFrame: TTimeFrame) {
-	// 		const startTime = new Date();
-	// 		const hours = reportsCronConfig[timeFrame].hours;
-	// 		const minutes = reportsCronConfig[timeFrame].minutes;
-	// 		return startTime.setHours(startTime.getHours() - hours, startTime.getMinutes() - minutes);
-	// 	}
-	// }
-	
 }

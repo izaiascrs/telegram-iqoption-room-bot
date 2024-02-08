@@ -219,13 +219,15 @@ export function applyFunctionAsync<T, R>(
 export function filterFreeChannels(destinationListArray: TDestinationListData[], filter?: boolean) {
 	if(filter) return destinationListArray.filter((list) => list.classification !== 'Free');
 	const isCountEqualToMaxMsgs = (msgsByTimeFrameCount['M1'].value() >= MAX_MESSAGES_BEFORE_FREE_CHANNEL);	
+
+	
 	const filteredArray = destinationListArray.filter((list: TDestinationListData) => {
 		if (list.classification === 'Vip') return true;
 		if (isCountEqualToMaxMsgs && !list.hasWorkingTime) return true;
 		if (list.hasWorkingTime && isFreeChannelWorkingTime() && isCountEqualToMaxMsgs) return true;
 		return false;
 	}, []);
-	
+
 	return filteredArray;
 }
 
@@ -311,13 +313,32 @@ type TSendReportMsg = {
 	destChannels: TDestinationListData[][]
 }
 
+function addDataToReportMessage(reportMsg: string) {
+	const msgHeader = '**VEM GANHAR DINHEIRO COM A GENTE NA SALA VIP IQ OPTION...👇👇👇**\n\n';
+	const msgFooter =
+	'\n\n'+
+	'🤑🤑🤑\n' +
+	'👇👇👇\n\n'+
+	'Chama no Suporte:\n\n'+
+	'https://wa.me/message/RMWFMXEKWKD3B1';	
+
+	const finalReportMsg = msgHeader + reportMsg + msgFooter;
+	return finalReportMsg;
+}
+
 export async function sendReportMessage(params: TSendReportMsg) {
 	const { client, reportsController, timeFrame, destChannels } = params;
 	const reportMsgObj = createReportMessage(timeFrame);
-	if(!client.connected || !reportMsgObj) return;	
+	if(!client.connected || !reportMsgObj) return;
+
+	const mixedChannelReportMessage = addDataToReportMessage(reportMsgObj.message);
+	const mxdChannelMsgObj = { message: mixedChannelReportMessage };
+	const mixedChannel = destChannels.flat().filter((d) => d.mixedChannel === true);
 
 	const receptors = destChannels.map((channel) => filterFreeChannels(channel, true));
 	const reportsPromises = receptors.map((receptor) => sendReportMessageToDestinationList(client, receptor, reportMsgObj));
+
+	reportsPromises.push(sendReportMessageToDestinationList(client, mixedChannel, mxdChannelMsgObj));
 	
 	await Promise.allSettled(reportsPromises)
 		.catch((err) => console.log(err));

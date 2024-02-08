@@ -45,7 +45,8 @@ import {
 } from './utils/handle-channels';
 
 import {
-	communityOfTradersIqOptionAdvertiseMessages,
+	communityOfTradersIqOptionFreeAdvertiseMessages,
+	communityOfTradersIqOptionVipAdvertiseMessages,
 	topSignalsIqOptionAdvertiseMessages,
 } from './advertise-messages';
 
@@ -67,11 +68,6 @@ const {
 	get: getSignalTimeout,
 } = makeSignalTimeout();
 
-// const {
-// 	// increment: incrementHowToTradeMsgCount,
-// 	reset: resetHowToTradeMsgCount,
-// 	value: msgCountToHowToTradeValue,
-// } = makeCounter();
 
 const {
 	increment: incrementAllMsgCount, 
@@ -82,14 +78,17 @@ const {
 (async () => {
 	await client.connect();
 	await client.getDialogs();
+
+	const communityOfTradersVipIds = communityOfTradersIqOptionDestListIds.filter((c) => c.classification === 'Vip');
+	const communityOfTradersFreeIds = communityOfTradersIqOptionDestListIds.filter((c) => c.classification === 'Free');
 	
 	client.addEventHandler(messageHandler, new NewMessage({}));
 
 	async function messageHandler(event: NewMessageEvent) {
-		
+				
 		if(isBreakTime()) return;
-
-		const messageData = extractDataFromMessageEvent(event);	
+		
+		const messageData = extractDataFromMessageEvent(event);
 
 		if(messageData.isChannel === false) return;
 
@@ -114,7 +113,7 @@ const {
 		const channelBySignal = findChannelBySignal(true);
 		
 		if(!channelById) return;
-
+		
 		const receptorOne = filterFreeChannels(topSignalsIqOptionDestListIds);
 		const receptorTwo = filterFreeChannels(communityOfTradersIqOptionDestListIds);
 
@@ -153,7 +152,9 @@ const {
 					if(getAllMsgCount() > MAX_MESSAGES_BEFORE_FREE_CHANNEL) resetAllMsgCount();
 
 					await handleSendAdvertiseMessage(client, topSignalsIqOptionAdvertiseMessages, topSignalsIqOptionDestListIds);
-					await handleSendAdvertiseMessage(client, communityOfTradersIqOptionAdvertiseMessages, communityOfTradersIqOptionDestListIds);
+
+					await handleSendAdvertiseMessage(client, communityOfTradersIqOptionVipAdvertiseMessages, communityOfTradersVipIds);
+					await handleSendAdvertiseMessage(client, communityOfTradersIqOptionFreeAdvertiseMessages, communityOfTradersFreeIds);
 
 					setIsSendingMessage(false);
 				}
@@ -224,8 +225,10 @@ const {
 
 						if(getAllMsgCount() > MAX_MESSAGES_BEFORE_FREE_CHANNEL) resetAllMsgCount();
 						
+						await handleSendAdvertiseMessage(client, communityOfTradersIqOptionVipAdvertiseMessages, communityOfTradersVipIds);
+						await handleSendAdvertiseMessage(client, communityOfTradersIqOptionFreeAdvertiseMessages, communityOfTradersFreeIds);						
+
 						await handleSendAdvertiseMessage(client, topSignalsIqOptionAdvertiseMessages, topSignalsIqOptionDestListIds);
-						await handleSendAdvertiseMessage(client, communityOfTradersIqOptionAdvertiseMessages, communityOfTradersIqOptionDestListIds);
 
 						setIsSendingMessage(false);
 					}
@@ -259,18 +262,14 @@ const {
 						setIsSendingMessage(false);
 						
 						handleMsgCount(allDestinationList);
-						// incrementHowToTradeMsgCount();
 						incrementAllMsgCount();
 
 						if(getAllMsgCount() > MAX_MESSAGES_BEFORE_FREE_CHANNEL) resetAllMsgCount();
 
-						await handleSendAdvertiseMessage(client, topSignalsIqOptionAdvertiseMessages, topSignalsIqOptionDestListIds);
-						await handleSendAdvertiseMessage(client, communityOfTradersIqOptionAdvertiseMessages, communityOfTradersIqOptionDestListIds);
+						await handleSendAdvertiseMessage(client, communityOfTradersIqOptionVipAdvertiseMessages, communityOfTradersVipIds);
+						await handleSendAdvertiseMessage(client, communityOfTradersIqOptionFreeAdvertiseMessages, communityOfTradersFreeIds);
 
-						// if(msgCountToHowToTradeValue() >= MAX_MESSAGES_BEFORE_HOW_TO_TRADE_MESSAGE) {
-						// 	await sendHowToTradeMessageToDestinationList(client, communityOfTradersDestinationListIds);
-						// 	resetHowToTradeMsgCount();
-						// }
+						await handleSendAdvertiseMessage(client, topSignalsIqOptionAdvertiseMessages, topSignalsIqOptionDestListIds);
 					}
 				}
 			}
@@ -307,18 +306,14 @@ const {
 				setIsSendingMessage(false);
 				
 				handleMsgCount(allDestinationList);
-				// incrementHowToTradeMsgCount();
 				incrementAllMsgCount();
 
 				if(getAllMsgCount() > MAX_MESSAGES_BEFORE_FREE_CHANNEL) resetAllMsgCount();
 
-				await handleSendAdvertiseMessage(client, topSignalsIqOptionAdvertiseMessages, topSignalsIqOptionDestListIds);
-				await handleSendAdvertiseMessage(client, communityOfTradersIqOptionAdvertiseMessages, communityOfTradersIqOptionDestListIds);
+				await handleSendAdvertiseMessage(client, communityOfTradersIqOptionVipAdvertiseMessages, communityOfTradersVipIds);
+				await handleSendAdvertiseMessage(client, communityOfTradersIqOptionFreeAdvertiseMessages, communityOfTradersFreeIds);
 
-				// if(msgCountToHowToTradeValue() >= MAX_MESSAGES_BEFORE_HOW_TO_TRADE_MESSAGE) {
-				// 	await sendHowToTradeMessageToDestinationList(client, communityOfTradersDestinationListIds);
-				// 	resetHowToTradeMsgCount();
-				// }
+				await handleSendAdvertiseMessage(client, topSignalsIqOptionAdvertiseMessages, topSignalsIqOptionDestListIds);
 			}
 		}
 

@@ -20,7 +20,7 @@ export type TDestinationListData = {
 };
 
 const topSignalsIqOptionDestList: TDestinationList[] = [
-	// ***** channel to send ************ //
+	// ***** REAL CHANNELS ************ //
 	{
 		type: 'Channel',
 		id: 2092057546,
@@ -37,9 +37,9 @@ const topSignalsIqOptionDestList: TDestinationList[] = [
 		hasWorkingTime: false,
 		mixedChannel: false,
 	}
-	// ***** channel to send ************ //
+	// ***** REAL CHANNELS ************ //
 
-	// ***** TEST CHANNELS  ************ //
+	// ***** TEST CHANNELS ************ //
 	// {
 	// 	type: 'Group', 
 	// 	id: 4072662222,
@@ -65,11 +65,11 @@ const topSignalsIqOptionDestList: TDestinationList[] = [
 	// 	classification: 'Vip',
 	//  hasWorkingTime: false,
 	// },
-	// ***** TEST CHANNELS  ************ //
+	// ***** TEST CHANNELS ************ //
 ];
 
 const communityOfTradersIqOptionDestList: TDestinationList[] = [
-	// ***** channel to send ************ //
+	// ***** REAL CHANNELS ************ //
 	{
 		type: 'Channel',
 		id:  1330013476,
@@ -86,9 +86,9 @@ const communityOfTradersIqOptionDestList: TDestinationList[] = [
 		hasWorkingTime: true,
 		mixedChannel: true,
 	},
-	// ***** channel to send ************ //
+	// ***** REAL CHANNELS ************ //
 
-	// ***** TEST CHANNELS  ************ //
+	// ***** TEST CHANNELS ************ //
 	// {
 	// 	type: 'Group',
 	// 	id: 4037329961,
@@ -97,7 +97,25 @@ const communityOfTradersIqOptionDestList: TDestinationList[] = [
 	// 	mixedChannel: true,
 	// 	hasWorkingTime: true,
 	// },
-	// ***** TEST CHANNELS  ************ //
+
+	// {
+	// 	type: 'User',
+	// 	id: 6018633227,
+	// 	name: 'izaias',
+	// 	classification: 'Vip',
+	// 	hasWorkingTime: false,
+	// 	mixedChannel: false,
+	// },
+
+	// {
+	// 	type: 'User',
+	// 	id: 6662761258,
+	// 	name: 'copyDerivBot',
+	// 	classification: 'Vip',
+	// 	hasWorkingTime: false,
+	// 	mixedChannel: false,
+	// },
+	// ***** TEST CHANNELS ************ //
 ];
 
 function makeDestinationItem (item: TDestinationList) {
