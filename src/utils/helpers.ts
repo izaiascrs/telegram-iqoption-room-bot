@@ -219,7 +219,6 @@ export function applyFunctionAsync<T, R>(
 export function filterFreeChannels(destinationListArray: TDestinationListData[], filter?: boolean) {
 	if(filter) return destinationListArray.filter((list) => list.classification !== 'Free');
 	const isCountEqualToMaxMsgs = (msgsByTimeFrameCount['M1'].value() >= MAX_MESSAGES_BEFORE_FREE_CHANNEL);	
-
 	
 	const filteredArray = destinationListArray.filter((list: TDestinationListData) => {
 		if (list.classification === 'Vip') return true;

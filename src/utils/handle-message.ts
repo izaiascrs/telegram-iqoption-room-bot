@@ -68,7 +68,7 @@ export function createNewSignalMessage(params: TCreateNewMessageParams) {
 	if (signal && signal.length) {
 		const CALL_PUT_SIGNAL = checkIfSignalMessageIsCallOrPut(signal[0]);
 		const CALL_PUT_MESSAGE = createTradeSignalMessage(CALL_PUT_SIGNAL);
-		const formattedMessage = `⚠ **ATENÇÃO TRADERS!** \n\n 🏛️ **${broker}** \n\n  👉 ${currencyPair} \n\n ⏱ ${time} \n\n ${ hours.length ? '⏰ ' + hours+ ' \n\n' : ''} ${CALL_PUT_MESSAGE}`;
+		const formattedMessage = `⚠ **ATENÇÃO TRADERS!** \n\n 🏛️ **${broker}** \n\n 👉 ${currencyPair} \n\n ⏱ ${time} \n\n ${ hours.length ? '⏰ ' + hours+ ' \n\n' : ''} ${CALL_PUT_MESSAGE}`;
 		return formattedMessage;
 	} else {		
 		const formattedMessage = `⚠ **ATENÇÃO TRADERS!** \n 🏛️ **${broker}** \n 👉 ${currencyPair} \n ⏱ ${time} \n 🏁 Aguarde o momento de entrada`;
