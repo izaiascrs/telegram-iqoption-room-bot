@@ -170,9 +170,17 @@ export const communityOfTradersIqOptionVipAdvertiseMessages: TAdvertiseMessage =
 				'✅ (2º PASSO):  Acompanhe nossas atividades aqui no Canal de 2ª a 6ª Feira entre 19:00 e 22:00. Nós vamos te dar todo suporte GRATUITAMENTE. 😃👍\n' + '\n' + '\n' +
 				'🆘 Se precisar de ajuda, MANDE UMA MENSAGEM PARA O NOSSO SUPORTE: https://wa.me/message/RMWFMXEKWKD3B1',
 			file: path.join(__dirname, '..', 'imgs', 'comunidade-traders', 'img-1.jpg'),
-		}
+		},
+		{
+			message: 'ALCANCE O SUCESSO QUE VOCÊ MERECE COM SUA PRÓPRIA SALA DE SINAIS!\n' + '\n' + '\n' +
+      '💰 Seja o proprietário da sua sala de sinais e alcance grandes ganhos!\n' + '\n' +
+      '🚀 Ensinamos você a lucrar, vender diariamente e administrar sua sala. Se ganhar acima de R$ 20.000,00 por mês é o seu objetivo, nós podemos ajudar!\n' + '\n' +
+      '👉🏻 Vagas limitadas a preço promocional!\n' +'\n' +
+      '🚀 💵 Chama agora: https://wa.me/message/RMWFMXEKWKD3B1'
+		},
 	]
 };
+
 // Free channel ad
 export const communityOfTradersIqOptionFreeAdvertiseMessages: TAdvertiseMessage = {
 	messagesIndexController: makeCounter(),
@@ -221,6 +229,13 @@ export const communityOfTradersIqOptionFreeAdvertiseMessages: TAdvertiseMessage 
 				'🚀 Venha para a Sala IQ OPTION que vai te levar ao próximo nível!😱 Você vai investir só R$39,90 por mês para lucrar muito com a gente!🤩\n' + '\n' +
 				'Vem lucrar...👇👇👇\n' + '\n' +
 				'💵 Chama agora:  https://wa.me/message/RMWFMXEKWKD3B1',
-		}
+		},
+		{
+			message: 'ALCANCE O SUCESSO QUE VOCÊ MERECE COM SUA PRÓPRIA SALA DE SINAIS!\n' + '\n' + '\n' +
+      '💰 Seja o proprietário da sua sala de sinais e alcance grandes ganhos!\n' + '\n' +
+      '🚀 Ensinamos você a lucrar, vender diariamente e administrar sua sala. Se ganhar acima de R$ 20.000,00 por mês é o seu objetivo, nós podemos ajudar!\n' + '\n' +
+      '👉🏻 Vagas limitadas a preço promocional!\n' +'\n' +
+      '🚀 💵 Chama agora: https://wa.me/message/RMWFMXEKWKD3B1'
+		},
 	]
 };
