@@ -3,16 +3,16 @@ import { checkIfMessageHasSignal, createNewSignalMessage, createTradeSignalMessa
 
 describe('handle messages functions', () => {
 	describe('format message new signal message details', () => {
-		it('format message with currency pair, time frame and waiting message', () => {
-			const expected = '⚠ **ATENÇÃO TRADERS!** \n 🏛️ **IQ OPTION** \n 👉 USD/GBP \n ⏱ 5 M \n 🏁 Aguarde o momento de entrada';
+		it('format message with currency pair, time frame and waiting message', () => {			
+			const expected = '➡️ ANÁLISE FEITA \n\n 🏛️ **IQ OPTION**\n📊 ATIVO: USD/GBP\n ⏳ EXPIRAÇÃO: 5 M\n 🏁 Aguarde o momento de entrada';
 			const params = { currencyPair: 'USD/GBP', hours: '', time: '5 M', signal: null, channelName: 'my channel', };
 			const msg = createNewSignalMessage(params);
 			expect(msg).toEqual(expected);
 		});
 
 		it('format message with currency pair, time frame, hours and buy signal / sell signal', () => {
-			const expectedCall = '⚠ **ATENÇÃO TRADERS!** \n\n 🏛️ **IQ OPTION** \n\n 👉 USD/GBP \n\n ⏱ 5 M \n\n ⏰ 10:10 \n\n 🟢👆 **COMPRA** 👆🟢';
-			const expectedPut = '⚠ **ATENÇÃO TRADERS!** \n\n 🏛️ **IQ OPTION** \n\n 👉 USD/GBP \n\n ⏱ 5 M \n\n ⏰ 10:10 \n\n 🔴👇 **VENDA** 👇🔴';
+			const expectedCall = '➡️ ANÁLISE FEITA \n\n 🏛️ **IQ OPTION**\n📊 ATIVO: USD/GBP\n ⏱ HORÁRIO: 10:10\n ⏳ EXPIRAÇÃO: 5 M\n 🟢 DIREÇÃO: COMPRA';
+			const expectedPut = '➡️ ANÁLISE FEITA \n\n 🏛️ **IQ OPTION**\n📊 ATIVO: USD/GBP\n ⏱ HORÁRIO: 10:10\n ⏳ EXPIRAÇÃO: 5 M\n 🔴 DIREÇÃO: VENDA';
 			const signalCall = ['CALL'] as unknown as RegExpExecArray;
 			const signalPut = ['PUT'] as unknown as RegExpExecArray;
 			const params = { currencyPair: 'USD/GBP', hours: '10:10', time: '5 M', signal: signalCall, channelName: 'my channel', };
@@ -25,13 +25,13 @@ describe('handle messages functions', () => {
 
 	describe('trade message function', () => {
 		it('create call signal message', () => {
-			const expected = '🟢👆 **COMPRA** 👆🟢';
+			const expected = '🟢 DIREÇÃO: COMPRA';
 			const callMsg = createTradeSignalMessage('CALL');
 			expect(callMsg).toEqual(expected);
 		});
 
 		it('create sell signal message', () => {
-			const expected = '🔴👇 **VENDA** 👇🔴';
+			const expected = '🔴 DIREÇÃO: VENDA';
 			const sellMsg = createTradeSignalMessage('PUT');
 			expect(sellMsg).toEqual(expected);
 		});

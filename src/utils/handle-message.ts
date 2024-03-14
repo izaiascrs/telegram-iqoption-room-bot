@@ -68,16 +68,16 @@ export function createNewSignalMessage(params: TCreateNewMessageParams) {
 	if (signal && signal.length) {
 		const CALL_PUT_SIGNAL = checkIfSignalMessageIsCallOrPut(signal[0]);
 		const CALL_PUT_MESSAGE = createTradeSignalMessage(CALL_PUT_SIGNAL);
-		const formattedMessage = `⚠ **ATENÇÃO TRADERS!** \n\n 🏛️ **${broker}** \n\n 👉 ${currencyPair} \n\n ⏱ ${time} \n\n ${ hours.length ? '⏰ ' + hours+ ' \n\n' : ''} ${CALL_PUT_MESSAGE}`;
+		const formattedMessage = `➡️ ANÁLISE FEITA \n\n 🏛️ **${broker}**\n📊 ATIVO: ${currencyPair}\n ${ hours.length ? '⏱ HORÁRIO: ' + hours+ '\n' : ''} ⏳ EXPIRAÇÃO: ${time}\n ${CALL_PUT_MESSAGE}`;
 		return formattedMessage;
 	} else {		
-		const formattedMessage = `⚠ **ATENÇÃO TRADERS!** \n 🏛️ **${broker}** \n 👉 ${currencyPair} \n ⏱ ${time} \n 🏁 Aguarde o momento de entrada`;
+		const formattedMessage = `➡️ ANÁLISE FEITA \n\n 🏛️ **${broker}**\n📊 ATIVO: ${currencyPair}\n ⏳ EXPIRAÇÃO: ${time}\n 🏁 Aguarde o momento de entrada`;
 		return formattedMessage;
 	}
 }
 
 export function createTradeSignalMessage(signal: 'CALL' | 'PUT') {
-	const message = signal === 'CALL' ? '🟢👆 **COMPRA** 👆🟢' : '🔴👇 **VENDA** 👇🔴';
+	const message = signal === 'CALL' ? '🟢 DIREÇÃO: COMPRA' : '🔴 DIREÇÃO: VENDA';
 	return message;
 }
 

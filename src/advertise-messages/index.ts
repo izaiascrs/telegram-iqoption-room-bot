@@ -71,8 +71,8 @@ export const topSignalsIqOptionAdvertiseMessages: TAdvertiseMessage = {
 		{
 			message: '⚠️🤑👇\n' + '\n' +
     'VEM GANHAR DINHEIRO COM A GENTE ❗️\n' + '\n' +
-    '👉🏦 Clique para Abrir na IQ OPTION -  https://bit.ly/CliqueAqui-IqOption\n' +'\n' +
-    '📈🆘📉 Não sabe Operar? Clique aqui 👉 https://www.youtube.com/@GabrielSantosOB/featured',
+    '👉🏦 Clique para Abrir na IQ OPTION -  https://bit.ly/IqOption-Forex-Binary\n' +'\n' +
+    '📈🆘📉 Não sabe Operar? Clique aqui 👉 https://www.youtube.com/@GabrielSantosOB',
 		},
 		{
 			message: '📉📈COMO APROVEITAR NOSSOS SINAIS❓\n' + '\n' + '\n' +
